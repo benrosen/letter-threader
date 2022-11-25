@@ -1,0 +1,50 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get package info
+        id: package
+        uses: codex-team/action-nodejs-package-info@v1
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install NPM packages
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+
+      - name: Zip build directory contents
+        run: zip ${{ steps.package.outputs.version }}.zip ./itch/*
+
+      - name: Push to Itch
+        uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.ITCH_TOKEN }}
+          CHANNEL: browser
+          ITCH_GAME: ${{ steps.package.outputs.name }}
+          ITCH_USER: brosen
+          PACKAGE: ${{ steps.package.outputs.version }}.zip
+          VERSION: ${{ steps.package.outputs.version }}
