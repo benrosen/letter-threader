@@ -2,6 +2,12 @@
   "name": "letter-grid",
   "version": "0.1.0",
   "private": true,
+  "config": {
+    "grid": {
+      "width": 5,
+      "height": 5
+    }
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -39,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.8.0"
   }
 }
