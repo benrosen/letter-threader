@@ -1,6 +1,7 @@
 {
-  "name": "letter-grid",
+  "name": "letter-threader",
   "version": "0.1.0",
+  "homepage": "https://benrosen.github.io/letter-threader",
   "private": true,
   "config": {
     "grid": {
