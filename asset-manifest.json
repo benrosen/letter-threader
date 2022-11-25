@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/letter-threader/static/css/main.9c9bfc9c.css",
+    "main.js": "/letter-threader/static/js/main.e9b3b252.js",
+    "static/js/787.ab4ce1f6.chunk.js": "/letter-threader/static/js/787.ab4ce1f6.chunk.js",
+    "index.html": "/letter-threader/index.html",
+    "main.9c9bfc9c.css.map": "/letter-threader/static/css/main.9c9bfc9c.css.map",
+    "main.e9b3b252.js.map": "/letter-threader/static/js/main.e9b3b252.js.map",
+    "787.ab4ce1f6.chunk.js.map": "/letter-threader/static/js/787.ab4ce1f6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9c9bfc9c.css",
+    "static/js/main.e9b3b252.js"
+  ]
+}
