@@ -1,3 +1,3 @@
-# Letter Grid
+# Letter Threader
 
-find words in a grid of random letters and chain them together with spaces
+String words together from a grid of random letters.
