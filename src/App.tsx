@@ -178,7 +178,6 @@ export const App = () => {
                 padding: "1rem",
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "blue"
             }}>
                 <div
                     style={{
@@ -190,7 +189,7 @@ export const App = () => {
                 >
                     <div style={{
                         fontSize: "2rem",
-                        fontWeight: 800
+                        fontWeight: 800,
                     }}>
                         {composition.reduce<number>((total, {glyph}) => {
                             const glyphValue = glyphValues[glyph];
@@ -202,7 +201,7 @@ export const App = () => {
                 <div
                     style={{
                         textAlign: "center",
-                        fontSize: "1.5rem",
+                        fontSize: "2rem",
                         display: "block",
                         maxWidth: "15rem",
                         wordBreak: "break-word",
@@ -210,9 +209,10 @@ export const App = () => {
                         fontFamily: "serif"
                     }}
                 >
-                    {composition
-                        .map(({glyph}) => (glyph === "_" ? " " : glyph.toLowerCase()))
-                        .join("")}
+                    {/*{composition*/}
+                    {/*    .map(({glyph}) => (glyph === "_" ? " " : glyph.toLowerCase()))*/}
+                    {/*    .join("")}*/}
+                    Lorem ipsum dolor sit amet opossum banana
                 </div>
                 <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
                     <table style={{display: "inline-block"}}>
