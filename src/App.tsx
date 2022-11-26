@@ -318,6 +318,8 @@ export const App = () => {
                     <button
                         disabled={composition.length < 1}
                         onClick={() => {
+                            setIsSkipMode(false)
+
                             setComposition((composition) => {
                                 return composition.slice(
                                     0,
@@ -333,6 +335,7 @@ export const App = () => {
                             setStartedAt(Date.now());
                             setElapsedTime(0);
                             setComposition([]);
+                            setIsSkipMode(false)
                         }}
                     >
                         New
