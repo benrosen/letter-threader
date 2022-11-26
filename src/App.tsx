@@ -173,12 +173,12 @@ export const App = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
-                height: "100%",
-                maxHeight: "485px",
+                height: "485px",
                 maxWidth: "300px",
                 padding: "1rem",
                 justifyContent: "space-between",
                 alignItems: "center",
+                backgroundColor: "blue"
             }}>
                 <div
                     style={{
