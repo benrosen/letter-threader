@@ -166,6 +166,7 @@ export const App = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 height: "100vh",
+
             }}
         >
             <div style={{
@@ -173,11 +174,11 @@ export const App = () => {
                 flexDirection: "column",
                 gap: "1rem",
                 height: "100%",
-                maxHeight: "700px",
-                maxWidth: "420px",
+                maxHeight: "485px",
+                maxWidth: "300px",
                 padding: "1rem",
                 justifyContent: "space-between",
-                alignItems: "center"
+                alignItems: "center",
             }}>
                 <div
                     style={{
@@ -189,6 +190,7 @@ export const App = () => {
                 >
                     <div style={{
                         fontSize: "2rem",
+                        fontWeight: 800
                     }}>
                         {composition.reduce<number>((total, {glyph}) => {
                             const glyphValue = glyphValues[glyph];
@@ -200,14 +202,16 @@ export const App = () => {
                 <div
                     style={{
                         textAlign: "center",
-                        fontSize: "3rem",
+                        fontSize: "1.5rem",
                         display: "block",
                         maxWidth: "15rem",
-                        minHeight: "15rem"
+                        wordBreak: "break-word",
+                        textTransform: "capitalize",
+                        fontFamily: "serif"
                     }}
                 >
                     {composition
-                        .map(({glyph}) => (glyph === "_" ? " " : glyph))
+                        .map(({glyph}) => (glyph === "_" ? " " : glyph.toLowerCase()))
                         .join("")}
                 </div>
                 <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
