@@ -209,10 +209,9 @@ export const App = () => {
                         fontFamily: "serif"
                     }}
                 >
-                    {/*{composition*/}
-                    {/*    .map(({glyph}) => (glyph === "_" ? " " : glyph.toLowerCase()))*/}
-                    {/*    .join("")}*/}
-                    Lorem ipsum dolor sit amet opossum banana
+                    {composition
+                        .map(({glyph}) => (glyph === "_" ? " " : glyph.toLowerCase()))
+                        .join("")}
                 </div>
                 <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
                     <table style={{display: "inline-block"}}>
