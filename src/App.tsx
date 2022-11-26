@@ -168,16 +168,28 @@ export const App = () => {
                 height: "100vh",
             }}
         >
-            <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                height: "100%",
+                maxHeight: "700px",
+                maxWidth: "420px",
+                padding: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center"
+            }}>
                 <div
                     style={{
+                        width: "100%",
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "right",
-                        fontSize: "2rem",
                     }}
                 >
-                    <div>
+                    <div style={{
+                        fontSize: "2rem",
+                    }}>
                         {composition.reduce<number>((total, {glyph}) => {
                             const glyphValue = glyphValues[glyph];
 
@@ -187,180 +199,185 @@ export const App = () => {
                 </div>
                 <div
                     style={{
-                        maxWidth: "14rem",
                         textAlign: "center",
                         fontSize: "3rem",
-                        padding: "1rem",
+                        display: "block",
+                        maxWidth: "15rem",
+                        minHeight: "15rem"
                     }}
                 >
                     {composition
                         .map(({glyph}) => (glyph === "_" ? " " : glyph))
                         .join("")}
                 </div>
-                <table>
-                    <tbody>
-                    {glyphs.map((row, rowIndex) => {
-                        return (
-                            <tr key={rowIndex}>
-                                {row.map((glyph, columnIndex) => {
-                                    const newestGlyph =
-                                        composition[Math.max(0, composition.length - 1)];
+                <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+                    <table style={{display: "inline-block"}}>
+                        <tbody>
+                        {glyphs.map((row, rowIndex) => {
+                            return (
+                                <tr key={rowIndex}>
+                                    {row.map((glyph, columnIndex) => {
+                                        const newestGlyph =
+                                            composition[Math.max(0, composition.length - 1)];
 
-                                    const isAlreadyInUse = composition.some((item) => {
+                                        const isAlreadyInUse = composition.some((item) => {
+                                            return (
+                                                item.columnIndex === columnIndex &&
+                                                item.rowIndex === rowIndex
+                                            );
+                                        });
+
+                                        const isMoreThanOneRowAwayFromNewestGlyph =
+                                            Math.abs(rowIndex - newestGlyph?.rowIndex) > 1;
+
+                                        const isMoreThanOneColumnAwayFromNewestGlyph =
+                                            Math.abs(columnIndex - newestGlyph?.columnIndex) > 1;
+
+                                        const index = composition.findIndex((item) => {
+                                            return (
+                                                item.rowIndex === rowIndex &&
+                                                item.columnIndex === columnIndex
+                                            );
+                                        });
+
+                                        const compositionGlyph = composition[index]?.glyph;
+
+                                        const isHovered =
+                                            hoveredCoordinates?.columnIndex === columnIndex &&
+                                            hoveredCoordinates?.rowIndex === rowIndex;
+
+                                        const isDisabled =
+                                            isAlreadyInUse ||
+                                            isMoreThanOneRowAwayFromNewestGlyph ||
+                                            isMoreThanOneColumnAwayFromNewestGlyph;
+
                                         return (
-                                            item.columnIndex === columnIndex &&
-                                            item.rowIndex === rowIndex
-                                        );
-                                    });
-
-                                    const isMoreThanOneRowAwayFromNewestGlyph =
-                                        Math.abs(rowIndex - newestGlyph?.rowIndex) > 1;
-
-                                    const isMoreThanOneColumnAwayFromNewestGlyph =
-                                        Math.abs(columnIndex - newestGlyph?.columnIndex) > 1;
-
-                                    const index = composition.findIndex((item) => {
-                                        return (
-                                            item.rowIndex === rowIndex &&
-                                            item.columnIndex === columnIndex
-                                        );
-                                    });
-
-                                    const compositionGlyph = composition[index]?.glyph;
-
-                                    const isHovered =
-                                        hoveredCoordinates?.columnIndex === columnIndex &&
-                                        hoveredCoordinates?.rowIndex === rowIndex;
-
-                                    const isDisabled =
-                                        isAlreadyInUse ||
-                                        isMoreThanOneRowAwayFromNewestGlyph ||
-                                        isMoreThanOneColumnAwayFromNewestGlyph;
-
-                                    return (
-                                        <td key={columnIndex}>
-                                            <button
-                                                disabled={isDisabled}
-                                                style={{
-                                                    fontSize: "1rem",
-                                                    fontWeight: "800",
-                                                    width: "3rem",
-                                                    height: "3rem",
-                                                    textAlign: "center",
-                                                    backgroundColor: isAlreadyInUse
-                                                        ? "white"
-                                                        : undefined,
-                                                }}
-                                                onClick={() => {
-                                                    setComposition((composition) => {
-                                                        return [
-                                                            ...composition,
-                                                            {
-                                                                rowIndex,
-                                                                columnIndex,
-                                                                glyph: isSkipMode ? "_" : glyph,
-                                                            },
-                                                        ];
-                                                    });
-
-                                                    setIsSkipMode(false);
-                                                }}
-                                                onMouseOver={() => {
-                                                    setHoveredCoordinates({rowIndex, columnIndex});
-                                                }}
-                                                onMouseLeave={() => {
-                                                    setHoveredCoordinates(null);
-                                                }}
-                                            >
-                                                <sup
+                                            <td key={columnIndex}
+                                                style={{textAlign: "center"}}>
+                                                <button
+                                                    disabled={isDisabled}
                                                     style={{
-                                                        fontSize: "0.75rem",
-                                                        fontWeight: "normal",
-                                                        textDecoration: "none",
+                                                        fontSize: "1rem",
+                                                        fontWeight: "800",
+                                                        width: "3rem",
+                                                        height: "3rem",
+                                                        textAlign: "center",
+                                                        backgroundColor: isAlreadyInUse
+                                                            ? "white"
+                                                            : undefined,
+                                                    }}
+                                                    onClick={() => {
+                                                        setComposition((composition) => {
+                                                            return [
+                                                                ...composition,
+                                                                {
+                                                                    rowIndex,
+                                                                    columnIndex,
+                                                                    glyph: isSkipMode ? "_" : glyph,
+                                                                },
+                                                            ];
+                                                        });
+
+                                                        setIsSkipMode(false);
+                                                    }}
+                                                    onMouseOver={() => {
+                                                        setHoveredCoordinates({rowIndex, columnIndex});
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        setHoveredCoordinates(null);
                                                     }}
                                                 >
-                                                    {index + 1 > 0 ? index + 1 : null}
-                                                </sup>
-                                                {!isDisabled && isSkipMode && isHovered
-                                                    ? "_"
-                                                    : compositionGlyph
-                                                        ? compositionGlyph
-                                                        : glyph}
-                                                <sub
-                                                    style={{
-                                                        fontSize: "0.75rem",
-                                                        fontWeight: "normal",
-                                                        textDecoration: "none",
-                                                    }}
-                                                >
-                                                    {isSkipMode && isHovered
-                                                        ? 0
-                                                        : glyphValues[
-                                                            compositionGlyph ? compositionGlyph : glyph
-                                                            ]}
-                                                </sub>
-                                            </button>
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </table>
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <button
-                        disabled={composition.length < 1}
-                        onClick={() => {
-                            setIsSkipMode(false)
-
-                            setComposition((composition) => {
-                                return composition.slice(
-                                    0,
-                                    Math.max(0, composition.length - 1)
-                                );
-                            });
-                        }}
-                    >
-                        Back
-                    </button>
-                    <button
-                        onClick={() => {
-                            setStartedAt(Date.now());
-                            setElapsedTime(0);
-                            setComposition([]);
-                            setIsSkipMode(false)
-                        }}
-                    >
-                        New
-                    </button>
+                                                    <sup
+                                                        style={{
+                                                            fontSize: "0.75rem",
+                                                            fontWeight: "normal",
+                                                            textDecoration: "none",
+                                                        }}
+                                                    >
+                                                        {index + 1 > 0 ? index + 1 : null}
+                                                    </sup>
+                                                    {!isDisabled && isSkipMode && isHovered
+                                                        ? "_"
+                                                        : compositionGlyph
+                                                            ? compositionGlyph
+                                                            : glyph}
+                                                    <sub
+                                                        style={{
+                                                            fontSize: "0.75rem",
+                                                            fontWeight: "normal",
+                                                            textDecoration: "none",
+                                                        }}
+                                                    >
+                                                        {isSkipMode && isHovered
+                                                            ? 0
+                                                            : glyphValues[
+                                                                compositionGlyph ? compositionGlyph : glyph
+                                                                ]}
+                                                    </sub>
+                                                </button>
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
+                        </tbody>
+                    </table>
                     <div
                         style={{
                             display: "flex",
                             flexDirection: "row",
-                            gap: "0.25rem",
-                            alignItems: "center",
+                            width: "100%",
+                            justifyContent: "space-between",
                         }}
                     >
-                        <input
-                            type="checkbox"
-                            id="isSkipMode"
-                            name="isSkipMode"
-                            checked={isSkipMode && composition.length > 0}
+                        <button
                             disabled={composition.length < 1}
-                            onChange={() => {
-                                setIsSkipMode((isSkipMode) => {
-                                    return !isSkipMode;
+                            onClick={() => {
+                                setIsSkipMode(false)
+
+                                setComposition((composition) => {
+                                    return composition.slice(
+                                        0,
+                                        Math.max(0, composition.length - 1)
+                                    );
                                 });
                             }}
-                        />
-                        <label htmlFor="isSkipMode">Skip</label>
+                        >
+                            Back
+                        </button>
+                        <button
+                            onClick={() => {
+                                setStartedAt(Date.now());
+                                setElapsedTime(0);
+                                setComposition([]);
+                                setIsSkipMode(false)
+                            }}
+                        >
+                            New
+                        </button>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "0.25rem",
+                                alignItems: "center",
+                            }}
+                        >
+                            <input
+                                type="checkbox"
+                                id="isSkipMode"
+                                name="isSkipMode"
+                                checked={isSkipMode && composition.length > 0}
+                                disabled={composition.length < 1}
+                                onChange={() => {
+                                    setIsSkipMode((isSkipMode) => {
+                                        return !isSkipMode;
+                                    });
+                                }}
+                            />
+                            <label htmlFor="isSkipMode">Skip</label>
+                        </div>
                     </div>
                 </div>
             </div>
