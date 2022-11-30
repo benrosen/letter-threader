@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 const getShuffledItems = <GenericArrayOfUnknownItems extends unknown[]>(
@@ -119,6 +119,34 @@ const glyphValues: { [glyph in Glyph]: number } = {
 };
 
 export const App = () => {
+  const [dictionary, setDictionary] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("letter-threader/dictionary.txt")
+      .then((response) => {
+        return response.text();
+      })
+      .then((lines) => {
+        setDictionary(() => {
+          return lines.split("\n").map((line) => {
+            return line.trim().toLowerCase();
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const isEnglishWord = useCallback(
+    (value: string): boolean => {
+      const lowercaseValue = value.toLowerCase();
+
+      return dictionary.includes(lowercaseValue);
+    },
+    [dictionary]
+  );
+
   const [startedAt, setStartedAt] = useState<number>(Date.now());
 
   const [glyphs, setGlyphs] = useState<Glyph[][]>([[], [], [], [], []]);
@@ -160,13 +188,50 @@ export const App = () => {
     columnIndex: number;
   } | null>(null);
 
-  const score = useMemo(() => {
-    return composition.reduce<number>((total, { glyph }) => {
-      const glyphValue = glyphValues[glyph];
+  const words = useMemo<
+    { glyphs: Glyph[]; isValid: boolean; value: number }[]
+  >(() => {
+    return composition.reduce<
+      {
+        glyphs: Glyph[];
+        isValid: boolean;
+        value: number;
+      }[]
+    >(
+      (words, { glyph }) => {
+        if (glyph === "_") {
+          return [...words, { glyphs: [], isValid: false, value: 0 }];
+        }
 
-      return total + glyphValue;
+        const glyphs = words[words.length - 1].glyphs;
+
+        glyphs.push(glyph);
+
+        const word = glyphs.join("");
+
+        const isValid = isEnglishWord(word);
+
+        const value = isValid
+          ? glyphs.reduce<number>((total, glyph) => {
+              const glyphValue = glyphValues[glyph];
+
+              return total + glyphValue;
+            }, 0)
+          : 0;
+
+        words[words.length - 1] = { glyphs, isValid, value };
+
+        return words;
+      },
+      [{ glyphs: [], isValid: false, value: 0 }]
+    );
+  }, [composition, isEnglishWord]);
+
+  const score = useMemo(() => {
+    return words.reduce<number>((total, { value }) => {
+      return total + value;
     }, 0);
-  }, [composition]);
+  }, [words]);
 
   return (
     <div
@@ -217,9 +282,22 @@ export const App = () => {
             fontFamily: "serif",
           }}
         >
-          {composition
-            .map(({ glyph }) => (glyph === "_" ? " " : glyph.toLowerCase()))
-            .join("")}
+          {words.map(({ glyphs, isValid }, index) => {
+            const word = glyphs.join("").toLowerCase();
+
+            return (
+              <div key={`word${index}`}>
+                <span
+                  style={{
+                    textDecoration: isValid ? undefined : "line-through",
+                  }}
+                >
+                  {word}
+                </span>
+                <span> </span>
+              </div>
+            );
+          })}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <table style={{ display: "inline-block" }}>
