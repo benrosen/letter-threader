@@ -119,7 +119,19 @@ const glyphValues: { [glyph in Glyph]: number } = {
   _: 0,
 };
 
+const HIGH_SCORE_KEY = "HIGH_SCORE";
+
 export const App = () => {
+  const [highscore, setHighscore] = useState<number>(0);
+
+  useEffect(() => {
+    setHighscore(() => {
+      const highScoreString = localStorage.getItem(HIGH_SCORE_KEY);
+
+      return highScoreString ? parseInt(highScoreString) : 0;
+    });
+  }, []);
+
   const isEnglishWord = useCallback((value: string): boolean => {
     const lowercaseValue = value.toLowerCase();
 
@@ -212,6 +224,14 @@ export const App = () => {
     }, 0);
   }, [words]);
 
+  useEffect(() => {
+    if (score > highscore) {
+      localStorage.setItem(HIGH_SCORE_KEY, score.toString());
+
+      setHighscore(score);
+    }
+  }, [score, highscore]);
+
   return (
     <div
       style={{
@@ -248,6 +268,9 @@ export const App = () => {
             }}
           >
             {score}
+            <span style={{ opacity: "0.5", fontWeight: 400 }}>
+              /{highscore}
+            </span>
           </div>
         </div>
         <div
