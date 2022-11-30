@@ -140,9 +140,11 @@ export const App = () => {
 
   const isEnglishWord = useCallback(
     (value: string): boolean => {
-      const lowercaseValue = value.toLowerCase();
+      value.toLowerCase();
 
-      return dictionary.includes(lowercaseValue);
+      // return dictionary.includes(lowercaseValue);
+
+      return true;
     },
     [dictionary]
   );
