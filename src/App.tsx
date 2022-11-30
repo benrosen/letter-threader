@@ -119,7 +119,7 @@ const glyphValues: { [glyph in Glyph]: number } = {
 };
 
 export const App = () => {
-  const [dictionary, setDictionary] = useState<string[]>([]);
+  const [, setDictionary] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("letter-threader/dictionary.txt")
@@ -138,16 +138,13 @@ export const App = () => {
       });
   }, []);
 
-  const isEnglishWord = useCallback(
-    (value: string): boolean => {
-      value.toLowerCase();
+  const isEnglishWord = useCallback((value: string): boolean => {
+    value.toLowerCase();
 
-      // return dictionary.includes(lowercaseValue);
+    // return dictionary.includes(lowercaseValue);
 
-      return true;
-    },
-    [dictionary]
-  );
+    return true;
+  }, []);
 
   const [startedAt, setStartedAt] = useState<number>(Date.now());
 
