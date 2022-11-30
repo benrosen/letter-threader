@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
+import { dictionary } from "./dictionary";
 
 const getShuffledItems = <GenericArrayOfUnknownItems extends unknown[]>(
   array: GenericArrayOfUnknownItems
@@ -119,31 +120,10 @@ const glyphValues: { [glyph in Glyph]: number } = {
 };
 
 export const App = () => {
-  const [, setDictionary] = useState<string[]>([]);
-
-  useEffect(() => {
-    fetch("letter-threader/dictionary.txt")
-      .then((response) => {
-        return response.text();
-      })
-      .then((lines) => {
-        setDictionary(() => {
-          return lines.split("\n").map((line) => {
-            return line.trim().toLowerCase();
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
   const isEnglishWord = useCallback((value: string): boolean => {
-    value.toLowerCase();
+    const lowercaseValue = value.toLowerCase();
 
-    // return dictionary.includes(lowercaseValue);
-
-    return true;
+    return dictionary.includes(lowercaseValue);
   }, []);
 
   const [startedAt, setStartedAt] = useState<number>(Date.now());
@@ -285,16 +265,14 @@ export const App = () => {
             const word = glyphs.join("").toLowerCase();
 
             return (
-              <div key={`word${index}`}>
-                <span
-                  style={{
-                    textDecoration: isValid ? undefined : "line-through",
-                  }}
-                >
-                  {word}
-                </span>
-                <span> </span>
-              </div>
+              <span
+                key={`word${index}`}
+                style={{
+                  textDecoration: isValid ? undefined : "line-through",
+                }}
+              >
+                {word + " "}
+              </span>
             );
           })}
         </div>
